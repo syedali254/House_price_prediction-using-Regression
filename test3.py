@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.datasets import fetch_california_housing
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
@@ -23,10 +25,43 @@ model.fit(X_train_scaled, y_train)
 
 # Predict and evaluate
 y_pred = model.predict(X_test_scaled)
-
 mse = mean_squared_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
 print("MSE:", mse)
 print("R²:", r2)
 print("Features:", data.feature_names)
+
+# -----------------------
+# Visualizations
+# -----------------------
+
+# 1. Scatter plot: Actual vs Predicted
+plt.figure(figsize=(6, 5))
+sns.scatterplot(x=y_test, y=y_pred, alpha=0.5)
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted House Prices")
+plt.grid(True)
+plt.show()
+
+# 2. Residuals plot
+residuals = y_test - y_pred
+plt.figure(figsize=(6, 5))
+sns.histplot(residuals, kde=True, color="red", bins=30)
+plt.title("Residuals Distribution")
+plt.xlabel("Residual")
+plt.ylabel("Frequency")
+plt.grid(True)
+plt.show()
+
+# 3. Feature importance (coefficients)
+plt.figure(figsize=(10, 5))
+coefficients = model.coef_
+sns.barplot(x=data.feature_names, y=coefficients)
+plt.xticks(rotation=45)
+plt.title("Feature Importance (Model Coefficients)")
+plt.ylabel("Coefficient Value")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
